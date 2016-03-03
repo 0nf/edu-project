@@ -1,0 +1,29 @@
+//TODO:
+//print
+//insert & delete
+//able to realise bubble sort
+
+container:
+insert(_ins_first, _ins
+length_last
+at(index)
+itershx
+
+iterator:               //link it with container
+builtin iter iter_create();
+creating by container methods
+iter first();
+iter last();//arr[n+1] (virtual)
+iter find();
+
+at_last();
+at_first();
+
+next();
+prev();
+
+get();
+
+insert
+delete
+find
