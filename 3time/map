@@ -1,0 +1,7 @@
+map.h:
+        struct map{
+               data
+        }
+        struct map_methods{
+               methods
+        }

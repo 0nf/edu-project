@@ -1,0 +1,3 @@
+test_list test1.c: gcc -D CREATE=list_create
+
+в git общий Makefile на двоих 
