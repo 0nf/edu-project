@@ -74,7 +74,10 @@ void list_free(list p){
   free(l);
 }
 
-//iter_list iter_list_create();
+iter_list iter_list_create(){
+  iter_list p = malloc(sizeof(iter_list*));
+  return p;
+}
 
 /*iterator methods*/
 
@@ -146,6 +149,12 @@ list list_create(){
   l->m->free = list_free;
   l->m->first = list_first;
   l->m->last = list_last;
+  l->m->insert = list_insert;
+  l->m->delete = list_delete;
+  l->m->iter_create = iter_list_create;
+  l->m->iter_free = iter_list_free;
+  l->m->iter_inc = iter_inc;
+  l->m->iter_dec = iter_dec;
   return (list) l;
 }
 
