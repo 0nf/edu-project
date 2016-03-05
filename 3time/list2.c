@@ -135,8 +135,7 @@ list list_create(){
   flist l;
   l = malloc(sizeof(flist*));
   l->num = 0;
-  //  l->first = malloc(sizeof(node*));
-  l->last = malloc(sizeof(node*));
+  l->last = malloc(sizeof(node*)); // FAIL HERE
   l->first = l->last;
   l->first->prev = START;
   l->last->next = END;
