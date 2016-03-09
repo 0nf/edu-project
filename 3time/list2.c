@@ -37,7 +37,7 @@ typedef struct Node {
   struct List *host;
 } *node;
 
-typedef struct FullList {
+typedef  struct FullList {
   list_m m;
   node first, last;
   int num, size;
@@ -75,7 +75,7 @@ void list_free(list p){
 }
 
 iter_list iter_list_create(){
-  iter_list p = malloc(sizeof(iter_list*));
+  iter_list p = (iter_list) malloc(sizeof(*p));//correct?
   return p;
 }
 
@@ -86,10 +86,10 @@ int isemptylist(list p){
   return (l->first == l->last) ? 1:0;
 }
 
-void* list_insert(list p, elem e){ //chech insert of first elem
+void* list_insert(list p, elem e){ //first elem correct, fail before second
   flist l = (flist) p;
   node n;
-  n = malloc(sizeof(node*));
+  n = malloc(sizeof(struct Node));
   n->val = e;
   n->host = l;
   if (isemptylist(l)){
@@ -133,9 +133,9 @@ elem iter_get(iter_list p){//there should be isemptylist before
 
 list list_create(){
   flist l;
-  l = malloc(sizeof(flist*));
+  l = (flist) malloc(sizeof(struct FullList));
   l->num = 0;
-  l->last = malloc(sizeof(node*)); // FAIL HERE
+  l->last = (node) malloc(sizeof(struct Node));
   l->first = l->last;
   l->first->prev = START;
   l->last->next = END;
@@ -154,6 +154,7 @@ list list_create(){
   l->m->iter_free = iter_list_free;
   l->m->iter_inc = iter_inc;
   l->m->iter_dec = iter_dec;
+  l->m->iter_get = iter_get;
   return (list) l;
 }
 
