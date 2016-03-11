@@ -92,4 +92,4 @@ srt: lib main
 	gcc -g -o srt list2.o main.o
 
 clean:
-	rm test *.o $(TESTS) gtest.a gtest_main.a *.o
+	rm  *.o $(TESTS) gtest.a gtest_main.a srt
