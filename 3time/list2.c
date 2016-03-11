@@ -67,11 +67,10 @@ void iter_list_free(iter_list it){
 }
 
 void list_free(list p){
-  flist l = (flist) p;
   iter_list it;
-  for (it = list_first(l); it != list_last(it); it = iter_inc(it))
+  for (it = list_first(p); it != list_last(p); it = iter_inc(it))
     iter_list_free(it);
-  free(l);
+  free((flist)p);
 }
 
 iter_list iter_list_create(){
@@ -91,8 +90,8 @@ void* list_insert(list p, elem e){ //first elem correct, fail before second
   node n;
   n = malloc(sizeof(struct Node));
   n->val = e;
-  n->host = l;
-  if (isemptylist(l)){
+  n->host = p;
+  if (isemptylist(p)){
     n->prev = START;
     n->next = l->last;
     l->last->prev = n;
@@ -144,7 +143,7 @@ list list_create(){
   //  l->first->val = e;
   //  l->first->host = l;
   l->last->host = l;
-  l->m = malloc(sizeof(list_m*));
+  l->m = malloc(sizeof(*l->m));
   l->m->free = list_free;
   l->m->first = list_first;
   l->m->last = list_last;

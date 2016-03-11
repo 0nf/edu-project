@@ -5,12 +5,12 @@ typedef void *elem;
 
 typedef struct List_m {
   //list and iterator methods
-  void (*free)(list);
+  void (*free)();
   iter_list (*iter_create)(elem);
   void (*iter_free)(iter_list);
 
-  iter_list (*first)(list);
-  iter_list (*last)(list);
+  iter_list (*first)();
+  iter_list (*last)();
 
   void* (*insert)();
   //  void* (*insert)(list, elem); 
