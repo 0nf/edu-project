@@ -12,7 +12,7 @@
 /*   iter_list list_last(list l); */
 
 /*   void* list_insert(list l, elem e);  */
-/*   void list_delete(iter_list p); */
+/*   void list_del(iter_list p); */
 /*   elem iter_get(iter_list p); */
 
 /*   iter_list iter_inc(iter_list l); */
@@ -74,18 +74,16 @@ void list_free(list p){
 }
 
 iter_list iter_list_create(){
-  iter_list p = (iter_list) malloc(sizeof(*p));//correct?
+  iter_list p = (iter_list) malloc(sizeof(*p));
   return p;
 }
-
-/*iterator methods*/
 
 int isemptylist(list p){
   flist l = (flist) p;
   return (l->first == l->last) ? 1:0;
 }
 
-void* list_insert(list p, elem e){ //first elem correct, fail before second
+void* list_insert(list p, elem e){ 
   flist l = (flist) p;
   node n;
   n = malloc(sizeof(struct Node));
@@ -106,7 +104,7 @@ void* list_insert(list p, elem e){ //first elem correct, fail before second
   return n;
 }
 
-void list_delete(iter_list p){ //check working with num=1
+void list_del(iter_list p){ //check working with num=1
   if (isemptylist(((node)p)->host))
     list_free(((node)p)->host);
   else {
@@ -147,8 +145,9 @@ list list_create(){
   l->m->free = list_free;
   l->m->first = list_first;
   l->m->last = list_last;
+  l->m->isempty = isemptylist;
   l->m->insert = list_insert;
-  l->m->delete = list_delete;
+  l->m->del = list_del;
   l->m->iter_create = iter_list_create;
   l->m->iter_free = iter_list_free;
   l->m->iter_inc = iter_inc;

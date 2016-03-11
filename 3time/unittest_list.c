@@ -3,6 +3,6 @@
 #include "gtest/gtest.h"
 
 TEST(GetTest, correct){
-  list l = list_create;
-  EXPECT_TRUE(isemptylist(l));
+  list l = list_create();
+  EXPECT_EQ(l->m->isempty(l), 1);
 }

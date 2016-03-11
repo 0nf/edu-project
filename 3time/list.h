@@ -12,9 +12,10 @@ typedef struct List_m {
   iter_list (*first)();
   iter_list (*last)();
 
+  int (*isempty)();
   void* (*insert)();
   //  void* (*insert)(list, elem); 
-  void (*delete)(iter_list);
+  void (*del)(iter_list);
   elem (*iter_get)(iter_list);
 
   iter_list (*iter_inc)(iter_list);
