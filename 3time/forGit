@@ -1,0 +1,9 @@
+make one detailed commit with description of all features (methods, tests)
+
+merge:
+
+1. checkout base 
+2. merge commit_n
+3. edit conflicts
+4. git add
+5. commit

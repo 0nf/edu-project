@@ -19,11 +19,8 @@ int main(){
   iter it1, it2;
   list l = list_create(l);
   int i, j;
-  l->insert(l, 1);
-  printf("%d\n", l->iter_get(l->first()));
-  return 0;
   for (i = 0; i < 10; i++){
-    l->insert(l, i);//insert(l, rand(1, 100));
+    l->insert(l, rand()%100);
   }
   for (it1 = l->first(l); it1 != l->last(l); it1 = l->iter_inc(it1))
     printf("%d ", l->iter_get(it1));
