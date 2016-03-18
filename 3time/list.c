@@ -53,11 +53,11 @@ iter_list list_last(list p){
   return l->last;
 }
 
-iter_list iter_inc(iter_list l){
+iter_list iter_list_inc(iter_list l){
   return (iter_list) (((node)l)->next);
 }
 
-iter_list iter_dec(iter_list l){ 
+iter_list iter_list_dec(iter_list l){ 
   return (iter_list) (((node)l)->prev);
 }
 
@@ -68,7 +68,7 @@ void iter_list_free(iter_list it){
 
 void list_free(list p){
   iter_list it;
-  for (it = list_first(p); it != list_last(p); it = iter_inc(it))
+  for (it = list_first(p); it != list_last(p); it = iter_list_inc(it))
     iter_list_free(it);
   free((flist)p);
 }
@@ -86,7 +86,7 @@ int isemptylist(list p){
 void* list_insert(list p, elem e){ 
   flist l = (flist) p;
   node n;
-  n = malloc(sizeof(struct Node));
+  n = (node) malloc(sizeof(struct Node));
   n->val = e;
   n->host = p;
   if (isemptylist(p)){
@@ -108,8 +108,8 @@ void list_del(iter_list p){ //check working with num=1
   if (isemptylist(((node)p)->host))
     list_free(((node)p)->host);
   else {
-    if ( ((node)p)->next == END)
-      ((node)p)->prev->next = END;
+    if ( ((node)p)->next == (node)END)
+      ((node)p)->prev->next = (node) END;
     else
       ((node)p)->prev->next = ((node)p)->next;
     if ( ((node)p)->prev == START)
@@ -122,11 +122,19 @@ void list_del(iter_list p){ //check working with num=1
 
 
 
-elem iter_get(iter_list p){//there should be isemptylist before
+elem iter_list_get(iter_list p){//there should be isemptylist before
                            //calling this
   return ((node)p)->val;
 }
 
+
+void swap_list(iter_list a, iter_list b){
+  node t = (node) malloc(sizeof(*t));
+  t->val = ((node)a)->val;
+  ((node)a)->val = ((node)b)->val;
+  ((node)b)->val = t->val;
+  free(t);
+}
 
 list list_create(){
   flist l;
@@ -135,12 +143,12 @@ list list_create(){
   l->last = (node) malloc(sizeof(struct Node));
   l->first = l->last;
   l->first->prev = START;
-  l->last->next = END;
+  l->last->next = (node) END;
   //  l->first->next = l->last;
   //  l->last->prev = l->first;
   //  l->first->val = e;
   //  l->first->host = l;
-  l->last->host = l;
+  l->last->host = (list) l;
   l->m = malloc(sizeof(*l->m));
   l->m->free = list_free;
   l->m->first = list_first;
@@ -150,9 +158,10 @@ list list_create(){
   l->m->del = list_del;
   l->m->iter_create = iter_list_create;
   l->m->iter_free = iter_list_free;
-  l->m->iter_inc = iter_inc;
-  l->m->iter_dec = iter_dec;
-  l->m->iter_get = iter_get;
+  l->m->iter_inc = iter_list_inc;
+  l->m->iter_dec = iter_list_dec;
+  l->m->iter_get = iter_list_get;
+  l->m->swap = swap_list;
   return (list) l;
 }
 

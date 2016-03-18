@@ -29,7 +29,7 @@ CXXFLAGS += -g -Wall -Wextra -pthread
 
 # All tests produced by this Makefile.  Remember to add new tests you
 # created to the list.
-TESTS = insert_test
+TESTS = megatest
 
 # All Google Test headers.  Usually you shouldn't change this
 # definition.
@@ -70,14 +70,14 @@ gtest_main.a : gtest-all.o gtest_main.o
 # function.
 
 #list.o : $(USER_DIR)/list.c $(USER_DIR)/list.h $(GTEST_HEADERS)
-list.o :  $(GTEST_HEADERS)
-	gcc $(CPPFLAGS) $(CXXFLAGS) -c $(USER_DIR)/list.c
+list.o :  $(GTEST_HEADERS) list.h
+	$(CC) $(CPPFLAGS) $(CXXFLAGS) -c $(USER_DIR)/list.c
 
-unittest_list.o : $(USER_DIR)/unittest_list.c \
-                    $(USER_DIR)/list.o $(GTEST_HEADERS)
-	g++ $(CPPFLAGS) $(CXXFLAGS) -c $(USER_DIR)/unittest_list.c
+unittest_list.o : $(USER_DIR)/unittest_list.cc \
+                   $(USER_DIR)/list.o $(GTEST_HEADERS)
+	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -c $(USER_DIR)/unittest_list.cc
 
-unittest_list : list.o unittest_list.o gtest_main.a
+megatest : list.o unittest_list.o gtest_main.a
 	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -lpthread $^ -o $@
 
 #from old Makefile
@@ -86,10 +86,10 @@ main:
 	gcc -g -c main.c
 
 lib:
-	gcc -g -c list2.c 
+	gcc -g -c list.c 
 
 srt: lib main
-	gcc -g -o srt list2.o main.o
+	gcc -g -o srt list.o main.o
 
 clean:
 	rm  *.o $(TESTS) gtest.a gtest_main.a srt

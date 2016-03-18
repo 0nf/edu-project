@@ -1,3 +1,7 @@
+#ifdef __cplusplus
+extern "C"{
+#endif
+
 typedef void *iter_list; 
 typedef void *elem;
 
@@ -20,6 +24,7 @@ typedef struct List_m {
 
   iter_list (*iter_inc)(iter_list);
   iter_list (*iter_dec)(iter_list);
+  void (*swap)(iter_list, iter_list);
 } *list_m;
 
 typedef struct List {
@@ -27,3 +32,7 @@ typedef struct List {
 } *list;
 
 list list_create();
+
+#ifdef __cplusplus
+}
+#endif
