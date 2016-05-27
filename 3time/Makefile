@@ -76,7 +76,7 @@ unittest_list.o : $(USER_DIR)/unittest_list.cc \
                    $(USER_DIR)/list.o $(GTEST_HEADERS)
 	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -g -c $(USER_DIR)/unittest_list.cc
 
-megatest : list.o unittest_list.o gtest_main.a
+test : list.o unittest_list.o gtest_main.a
 	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -g -lpthread $^ -o $@
 
 #from old Makefile

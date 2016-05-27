@@ -23,11 +23,7 @@
 /*   list_m * m; */
 /* } list; */
 
-typedef union Iter {
-  iter_list l;
-  iter_vec v;
-  char x[256];
-} iter;
+
 
 enum {START, END};
 
@@ -66,24 +62,21 @@ void iter_list_free(iter_list it){
   free(it);
 }
 
-void list_free(list p){
+void list_free(void* v){
+  list p = (list) v;
   iter_list it;
   for (it = list_first(p); it != list_last(p); it = iter_list_inc(it))
     iter_list_free(it);
   free((flist)p);
 }
 
-iter_list iter_list_create(){
-  iter_list p = (iter_list) malloc(sizeof(*p));
-  return p;
-}
-
 int isemptylist(list p){
-  flist l = (flist) p;
-  return (l->first == l->last) ? 0:1;
+  flist l = (flist) p;          /* fail begins here: this l!=list_create() */
+  return (l->first == l->last) ? 1:0;
 }
 
-void* list_insert(list p, elem e){ 
+void* list_insert(void* v, elem e){
+  list p = (list) v;
   flist l = (flist) p;
   node n;
   n = (node) malloc(sizeof(struct Node));
@@ -111,7 +104,7 @@ void list_del(iter_list p){ //check working with num=1
     if ( ((node)p)->next == (node)END)
       ((node)p)->prev->next = (node) END;
     else
-      ((node)p)->prev->next = ((node)p)->next;
+      ((node)p)->prev->next = ((node)p)->next;//when dealing with first elem, p->prev == START and START->next causes segfault
     if ( ((node)p)->prev == START)
       ((node)p)->next->prev = START;
     else
@@ -127,14 +120,15 @@ elem iter_list_get(iter_list p){//there should be isemptylist before
   return ((node)p)->val;
 }
 
-void list_foreach(list l, void (*func)()){
+void list_foreach(void* v, void (*func)()){
+  list l = (list) v;
   flist p = (flist)l;
   int i;
   node n = p->first;
-  func(n->val);
+  func(&n->val);
   for (i = 1; i < p->num; i++){
     n = n->next;
-    func(n->val);
+    func(&n->val);
 }
 }
 
@@ -150,16 +144,6 @@ void swap_list(iter_list a, iter_list b){
 list list_create(){
   flist l;
   l = (flist) malloc(sizeof(struct FullList));
-  l->num = 0;
-  l->last = (node) malloc(sizeof(struct Node));
-  l->first = l->last;
-  l->first->prev = START;
-  l->last->next = (node) END;
-  //  l->first->next = l->last;
-  //  l->last->prev = l->first;
-  //  l->first->val = e;
-  //  l->first->host = l;
-  l->last->host = (list) l;
   l->m = malloc(sizeof(*l->m));
   l->m->free = list_free;
   l->m->first = list_first;
@@ -167,13 +151,19 @@ list list_create(){
   l->m->isempty = isemptylist;
   l->m->insert = list_insert;
   l->m->del = list_del;
-  l->m->iter_create = iter_list_create;
   l->m->iter_free = iter_list_free;
   l->m->iter_inc = iter_list_inc;
   l->m->iter_dec = iter_list_dec;
   l->m->iter_get = iter_list_get;
   l->m->swap = swap_list;
   l->m->foreach = list_foreach;
+  l->num = 0;
+  l->last = (node) malloc(sizeof(struct Node));
+  l->first = l->last;
+  l->first->prev = (node) START;
+  l->last->next = (node)  END;
+  l->last->host = (list) l;
+
   return (list) l;
 }
 
