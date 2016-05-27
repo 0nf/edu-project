@@ -81,13 +81,13 @@ megatest : list.o unittest_list.o gtest_main.a
 
 #from old Makefile
 
-main:
+main.o:
 	gcc -g -c main.c
 
-lib:
+lib.o:
 	gcc -g -c list.c 
 
-srt: lib main
+prog: lib.o main.o
 	gcc -g -o srt list.o main.o
 
 clean:

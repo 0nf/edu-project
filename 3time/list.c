@@ -40,7 +40,7 @@ typedef struct Node {
 typedef  struct FullList {
   list_m m;
   node first, last;
-  int num, size;
+  int num;
 } *flist;
 
 iter_list list_first(list p){
@@ -80,7 +80,7 @@ iter_list iter_list_create(){
 
 int isemptylist(list p){
   flist l = (flist) p;
-  return (l->first == l->last) ? 1:0;
+  return (l->first == l->last) ? 0:1;
 }
 
 void* list_insert(list p, elem e){ 
@@ -127,6 +127,17 @@ elem iter_list_get(iter_list p){//there should be isemptylist before
   return ((node)p)->val;
 }
 
+void list_foreach(list l, void (*func)()){
+  flist p = (flist)l;
+  int i;
+  node n = p->first;
+  func(n->val);
+  for (i = 1; i < p->num; i++){
+    n = n->next;
+    func(n->val);
+}
+}
+
 
 void swap_list(iter_list a, iter_list b){
   node t = (node) malloc(sizeof(*t));
@@ -162,6 +173,7 @@ list list_create(){
   l->m->iter_dec = iter_list_dec;
   l->m->iter_get = iter_list_get;
   l->m->swap = swap_list;
+  l->m->foreach = list_foreach;
   return (list) l;
 }
 

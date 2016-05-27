@@ -25,6 +25,7 @@ typedef struct List_m {
   iter_list (*iter_inc)(iter_list);
   iter_list (*iter_dec)(iter_list);
   void (*swap)(iter_list, iter_list);
+  void (*foreach)();
 } *list_m;
 
 typedef struct List {
